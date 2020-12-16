@@ -1,0 +1,140 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  _id: String!
+  email: String!
+  name: String!
+  surname: String!
+  active: Boolean!
+  webUrl: String
+  alias: String
+  password: String
+  username: String
+  photo: String
+  bio: String
+  gender: Gender
+  birthDate: Date
+  socialAccounts: [SocialAccount!]
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER_GENDER
+  RATHER_NOT_SAY
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type ProfileUser {
+  _id: String!
+  email: String!
+  name: String!
+  surname: String!
+  active: Boolean!
+  webUrl: String
+  alias: String
+  password: String
+  username: String
+  photo: String
+  bio: String
+  gender: Gender
+  birthDate: Date
+  socialAccounts: [SocialAccount!]
+  isSocialLogin: Boolean!
+}
+
+type SocialAccount {
+  id: String!
+  type: SocialType!
+}
+
+enum SocialType {
+  GOOGLE
+  FACEBOOK
+}
+
+type UserPaginated {
+  data: [User!]!
+  offset: Int!
+  limit: Int!
+  total: Int!
+}
+
+type Login {
+  token: String!
+  user: ProfileUser!
+}
+
+type Query {
+  user_profile: ProfileUser!
+  user_find(paginate: PaginateDto): UserPaginated!
+  user_login(input: LoginDto!): Login!
+  user_valid_forgot_password_token(token: ID!): Boolean!
+}
+
+input PaginateDto {
+  offset: Int
+  limit: Int
+}
+
+input LoginDto {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  user_register(input: RegisterDto!): Boolean!
+  user_change_password(input: ChangePasswordDto!): Boolean!
+  user_change_email(newEmail: String!): String!
+  user_change_username(newUsername: String!): String!
+  user_modify_profile(input: ModifyProfileDto!): User!
+  user_activate_account(token: ID!): Boolean!
+  user_create_forgot_password_token(email: String!): Boolean!
+  user_change_forgot_password(input: RecoverPasswordDto!): Boolean!
+  user_social_login(input: SocialLoginDto!): Login!
+  user_link_social_profile(input: SocialLoginDto!): Boolean!
+  user_unlink_social_profile(input: SocialUnlinkDto!): Boolean!
+}
+
+input RegisterDto {
+  email: String!
+  name: String!
+  surname: String!
+  password: String!
+  alias: String
+  username: String
+}
+
+input ChangePasswordDto {
+  oldPassword: String
+  newPassword: String!
+}
+
+input ModifyProfileDto {
+  name: String
+  surname: String
+  alias: String
+  bio: String
+  webUrl: String
+  gender: String
+  birthDate: Date
+}
+
+input RecoverPasswordDto {
+  token: String!
+  newPassword: String!
+}
+
+input SocialLoginDto {
+  token: String!
+  type: String!
+}
+
+input SocialUnlinkDto {
+  id: String!
+  type: String!
+}

@@ -1,0 +1,7 @@
+export enum Gender {
+	MALE = 'MALE',
+	FEMALE = 'FEMALE',
+	OTHER_GENDER = 'OTHER_GENDER',
+	RATHER_NOT_SAY = 'RATHER_NOT_SAY',
+}
+

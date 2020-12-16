@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "paths" : {
+      "@Common/*": ["src/common/*"],
+      "@Users/*": ["src/users/*"],
+      "@Books/*": ["src/books/*"],
+      "@Authors/*": ["src/authors/*"],
+      "@Genres/*": ["src/genres/*"],
+      "@Follows/*": ["src/follows/*"],
+      "@Likes/*": ["src/likes/*"],
+    }
+  },
+  "exclude": ["dist", "dist-test", "uploads"]
+}

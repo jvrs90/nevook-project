@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"target": "ES2019",
+		"rootDir": "./src",
+		"outDir": "./dist/cjs",
+		"strict": true,
+		"removeComments": true,
+		"module": "CommonJS",
+		"declaration": true,
+		"declarationDir": "./@types"
+	}
+}

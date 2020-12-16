@@ -1,0 +1,7 @@
+export enum UserRoles {
+    BASIC_USER = 'BASIC_USER',
+    SUBSCRIPTOR = 'SUBSCRIPTOR',
+    MAINTENANCE = 'MAINTENANCE',
+    ADMIN = 'ADMIN',
+    SUPER_ADMIN = 'SUPER_ADMIN',
+}
