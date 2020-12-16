@@ -9,8 +9,6 @@
     "initialize": "lerna bootstrap && npm run publish-utils && npm run link-nevook && npm run link-admin-panel && npm run link-backend"
   },
   "devDependencies": {
-    "@types/passport": "^1.0.4",
-    "@types/passport-google-oauth20": "^2.0.4",
     "lerna": "^3.22.1",
     "typescript": "^4.1.3"
   }
