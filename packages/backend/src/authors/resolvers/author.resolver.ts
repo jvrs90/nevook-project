@@ -9,7 +9,6 @@ import {
 import { IAuthorDoc } from '@Authors/interfaces/author-document.interface';
 import { AuthorErrors } from '@Authors/enums/author-errors.enum';
 import { AuthorModifyDto } from '@Authors/dto/author-modify.dto';
-import { AuthorModifyPipe } from '@Authors/pipes/author-modify.pipe';
 import { AuthorService } from '@Authors/services/author.service';
 import { IPaginate } from '@Common/interfaces/mongoose.interface';
 import { ObjectIDPipe } from '@Common/pipes/objectid.pipe';
@@ -17,11 +16,13 @@ import { ObjectIDArrayPipe } from '@Common/pipes/objectid-array.pipe';
 import { ObjectID } from '@Common/interfaces/mongoose.interface';
 import { PaginateDto } from '@Common/types/paginate-filter.types';
 import { IUserDoc } from '@Users/interfaces/user-document.interface';
-import { AllowedUserRoles } from '@Users/auth/allowed-user-roles.decorator';
+import { Auth } from '@Users/auth/auth.decorator';
 import { UserGqlAuthGuard } from '@Users/auth/user-gql-auth.guard';
-import { UserRoles } from '@Users/enums/user-roles.enum';
-import { UserGqlRolesGuard } from '@Users/auth/user-gql-roles.guard';
-
+import { AppResource } from '@Users/enums/user-roles.enum';
+import { AuthorCreateDto } from '@Authors/dto/author-create.dto';
+import { AuthorCreatePipe } from '@Authors/pipes/author-create.pipe';
+import { AuthorModifyPipe } from '@Authors/pipes/author-modify.pipe';
+import { GetGqlAuthUser } from '@Common/auth/get-user.decorator';
 
 
 @Resolver(() => Author)
@@ -95,7 +96,7 @@ export class AuthorResolver {
      * @returns Author data
      */
     @Query(() => FullAuthor)
-    @UseGuards(UserGqlAuthGuard)
+   @UseGuards(UserGqlAuthGuard)
     async author_admin_find_by_id(
         @Args('authorId', { type: () => ID }, ObjectIDPipe)
         authorId: ObjectID
@@ -110,27 +111,42 @@ export class AuthorResolver {
     //#region Author
 
     /**
-     * Modifies an axisting course data.
+     * Creates a new author.
+     *
+     * - AUTH: Users
+     * - ROLES: ADMIN | SUPER_ADMIN
+     * @param authorData Author creation data
+     * @returns Author object id
+     */
+    @Mutation(() => ID)
+    @Auth({action: 'create', possession:'any', resource: AppResource.AUTHOR })
+    async author_admin_create(
+        @Args('authorData', { type: () => AuthorCreateDto }, AuthorCreatePipe)
+        authorData: AuthorCreateDto,
+        @GetGqlAuthUser() user: IUserDoc
+    ): Promise<ObjectID> {
+        //TODO: averiguar como obtener el usuario logueado
+        return this.authorService.create(authorData, user);
+    }
+
+    /**
+     * Modifies an axisting author data.
      *
      * - AUTH: User
-     * - Roles: Super_Admin
+     * - Roles: ADMIN | SUPER_ADMIN
      * @param authorId Author ObjectId
      * @param input True if success
      */
     @Mutation(() => ID)
-    //TODO: Probar si funcionar con nest-access-control https://github.com/nestjsx/nest-access-control
-    @AllowedUserRoles(UserRoles.SUPER_ADMIN)
-    @UseGuards(UserGqlAuthGuard, UserGqlRolesGuard)
+    @Auth({action: 'update', possession:'any', resource: AppResource.AUTHOR })
     async author_admin_modify(
         @Args('authorId', { type: () => ID }, ObjectIDPipe)
         authorId: ObjectID,
         @Args('input', { type: () => AuthorModifyDto }, AuthorModifyPipe)
         input: AuthorModifyDto
-    ): Promise<boolean> {
-        await this.authorService.modifyAuthor(authorId, input);
-        return true
+    ): Promise<ObjectID> {
+        return await this.authorService.modifyAuthor(authorId, input);
     }
-
 
     /**
      * Remove an existing author.
@@ -142,9 +158,7 @@ export class AuthorResolver {
      * @return True if success
      */
     @Mutation(() => ID)
-    //TODO: Probar si funcionar con nest-access-control https://github.com/nestjsx/nest-access-control
-    @AllowedUserRoles(UserRoles.SUPER_ADMIN)
-    @UseGuards(UserGqlAuthGuard, UserGqlRolesGuard)
+    @Auth({action: 'delete', possession:'any', resource: AppResource.AUTHOR })
     async author_admin_delete(
         @Args('authorId', { type: () => ID }, ObjectIDPipe)
         authorId: ObjectID

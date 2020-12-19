@@ -6,8 +6,11 @@ import { IUserDoc } from '@Users/interfaces/user-document.interface';
  * GQL decorator for get auth user
  */
 export const GetGqlAuthUser = createParamDecorator(
-	(_, ctx: GqlExecutionContext): IUserDoc =>
-		GqlExecutionContext.create(ctx).getContext().req.user
+	(_, ctx: GqlExecutionContext): IUserDoc => {
+		const request = GqlExecutionContext.create(ctx).getContext().req;
+		return request.user;
+	}
+
 );
 
 /**

@@ -9,7 +9,7 @@ import { AuthorController } from "./controllers/author.controller";
 import { AuthorModels } from "./enums/author-models.enum";
 import { authorProviders } from "./providers/author.providers";
 import { AuthorService } from "./services/author.service";
-import { AuthorSchema } from "./shcemas/author.schema";
+import { AuthorSchema } from "./schemas/author.schema";
 
 
 

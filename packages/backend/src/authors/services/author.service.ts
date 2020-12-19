@@ -1,15 +1,14 @@
 import { ConfigService } from '@nestjs/config';
-import { FOLDER_UPLOADS } from './../../common/utils/file-upload';
+import { FOLDER_UPLOADS_AUTHORS } from './../../common/utils/file-upload';
 import { AuthorModifyDto } from './../dto/author-modify.dto';
 import {
-    BadRequestException,
     ConflictException,
     Injectable,
     Logger,
     NotFoundException
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ClientSession, Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { promises as fspromises } from 'fs';
 import { resolve } from 'path';
 import { Env } from '@Common/enums/env.enum';
@@ -71,13 +70,13 @@ export class AuthorService {
 
     /**
      * Finds some authors by an array of slugs.
-     * Only returns authors whose visibility is public.
+     *
      * @param authorsUrls Author urls array
      * @returns Authors array
      */
     publicFindBySlugArray(authorsUrls: string[]): Promise<IAuthorDoc[]> {
         return this.authorModel
-            .find({ _id: { $in: [...authorsUrls] }, visibility: true })
+            .find({ _id: { $in: [...authorsUrls] } })
             .exec() as Promise<IAuthorDoc[]>;
     }
 
@@ -88,6 +87,7 @@ export class AuthorService {
 
     /**
      * Finds all existing authors (with pagination)
+     *
      * @param offset Number of elements to skip
      * @param limit Number of elements to return
      * @return Authors array paginated
@@ -171,7 +171,7 @@ export class AuthorService {
      * @param authorData Author creation data
      * @param userId New author ObjectId
      */
-    async create(authorData: AuthorCreateDto, userId: ObjectID): Promise<ObjectID> {
+    async create(authorData: AuthorCreateDto, user: IUserDoc): Promise<ObjectID> {
         const { slug } = authorData;
 
         const existingAuthor = await this.findBySlug(slug);
@@ -179,7 +179,7 @@ export class AuthorService {
         if (existingAuthor) throw new ConflictException(AuthorErrors.AUTHOR_ALREADY_EXISTS);
         const author = await this.authorModel.create({
             ...authorData,
-            createdBy: userId
+            createdBy: user
         });
         return author._id
     }
@@ -195,7 +195,7 @@ export class AuthorService {
     async modifyAuthor(
         authorId: ObjectID,
         { name, slug, bio, photo }: AuthorModifyDto
-    ): Promise<void> {
+    ): Promise<ObjectID> {
         const existingAuthor = await this.findById(authorId);
 
         if (!existingAuthor) throw new NotFoundException(AuthorErrors.AUTHOR_NOT_FOUND);
@@ -204,17 +204,17 @@ export class AuthorService {
         if (bio) existingAuthor.bio = bio;
         if (photo) existingAuthor.photo = photo;
         if (slug) {
-            const existingAuthorBySlug = this.findBySlug(slug);
+            const existingAuthorBySlug = await this.findBySlug(slug);
             if (existingAuthorBySlug) throw new ConflictException(AuthorErrors.AUTHOR_ALREADY_EXISTS);
             existingAuthor.slug = slug;
         }
-
-        await existingAuthor.save();
+        const author = await existingAuthor.save();
+        return author._id;
     }
 
 
     /**
-     * Remove an existing course
+     * Remove an existing author
      * @param authorId Author ObjectId
      */
     async deleteAuthor(authorId: ObjectID): Promise<void> {
@@ -243,10 +243,10 @@ export class AuthorService {
             await fspromises
                 .unlink(
                     resolve(
-                        FOLDER_UPLOADS,
+                        FOLDER_UPLOADS_AUTHORS,
                         author.photo.replace(
                             this.configService.get(Env.SELF_DOMAIN) +
-                            this.configService.get(Env.UPLOADS_STATICS_PATH) +
+                            this.configService.get(Env.UPLOADS_STATICS_PATH_AUTHORS) +
                             '/',
                             ''
                         )
@@ -255,7 +255,7 @@ export class AuthorService {
                 .catch(error => Logger.error(error));
         author.photo =
             this.configService.get(Env.SELF_DOMAIN) +
-            this.configService.get(Env.UPLOADS_STATICS_PATH) +
+            this.configService.get(Env.UPLOADS_STATICS_PATH_AUTHORS) +
             '/' +
             filename;
         await author.save();

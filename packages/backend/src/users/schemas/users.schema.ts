@@ -1,6 +1,7 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Gender } from '@Common/enums/gender.enum';
 import { SocialType } from '@Users/enums/social-type.enum';
+import { UserRoles } from '@Users/enums/user-roles.enum';
 
 type SocialAccountsProps = 'id' | 'type';
 
@@ -46,6 +47,9 @@ export class User {
 
 	@Prop({ type: Date })
 	birthDate: Date;
+
+	@Prop({ type: [{ type: String, enum: Object.values(UserRoles) }], default: [UserRoles.BASIC_USER] })
+	roles: UserRoles[];
 
 	@Prop(
 		raw([

@@ -1,8 +1,6 @@
 import {
 	BadRequestException,
 	ConflictException,
-	forwardRef,
-	Inject,
 	Injectable,
 	Logger,
 	NotFoundException,
@@ -16,7 +14,7 @@ import { promises as fspromises } from 'fs';
 import { resolve } from 'path';
 import { compare, hash } from 'bcrypt';
 import { Env } from '@Common/enums/env.enum';
-import { FOLDER_UPLOADS } from '@Common/utils/file-upload';
+import { FOLDER_UPLOADS_USERS } from '@Common/utils/file-upload';
 import { IPaginate, ObjectID } from '@Common/interfaces/mongoose.interface';
 import { MailService } from '@Common/utils/mail.service';
 import { JwtStrategies } from '@Common/enums/jwt-strategies.enum';
@@ -391,10 +389,10 @@ export class UsersService {
 			await fspromises
 				.unlink(
 					resolve(
-						FOLDER_UPLOADS,
+						FOLDER_UPLOADS_USERS,
 						user.photo.replace(
 							this.configService.get(Env.SELF_DOMAIN) +
-							this.configService.get(Env.UPLOADS_STATICS_PATH) +
+							this.configService.get(Env.UPLOADS_STATICS_PATH_USERS) +
 							'/',
 							''
 						)
@@ -403,7 +401,7 @@ export class UsersService {
 				.catch(error => Logger.error(error));
 		user.photo =
 			this.configService.get(Env.SELF_DOMAIN) +
-			this.configService.get(Env.UPLOADS_STATICS_PATH) +
+			this.configService.get(Env.UPLOADS_STATICS_PATH_USERS) +
 			'/' +
 			filename;
 		await user.save();

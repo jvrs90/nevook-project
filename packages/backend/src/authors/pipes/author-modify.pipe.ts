@@ -1,9 +1,8 @@
-import { trimAllStrings } from '@Common/utils/clean-object';
+import { cleanObject, trimAllStrings } from '@Common/utils/clean-object';
 import { CommonErrors } from '@Common/enums/common-errors.enum';
 import { AuthorModifyDto } from '@Authors/dto/author-modify.dto';
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { AuthorValidation } from 'nevook-utils';
-import { cleanObject } from '@Common/utils/clean-object';
 
 
 

@@ -69,11 +69,103 @@ type Login {
   user: ProfileUser!
 }
 
+type Author {
+  _id: String!
+  name: String!
+  slug: String
+  bio: String
+  photo: String
+}
+
+type FullAuthor {
+  _id: String!
+  name: String!
+  slug: String
+  bio: String
+  photo: String
+  createdBy: User!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type AuthorPaginated {
+  data: [FullAuthor!]!
+  offset: Int!
+  limit: Int!
+  total: Int!
+}
+
+type Genre {
+  _id: String!
+  name: String!
+  slug: String!
+  photo: String
+}
+
+type FullGenre {
+  _id: String!
+  name: String!
+  slug: String!
+  photo: String
+  createdBy: User!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type GenrePaginated {
+  data: [FullGenre!]!
+  offset: Int!
+  limit: Int!
+  total: Int!
+}
+
+type Book {
+  _id: String!
+  title: String!
+  slug: String
+  synopsis: String
+  cover: String
+  author: Author
+  genre: Genre
+}
+
+type FullBook {
+  _id: String!
+  title: String!
+  slug: String
+  synopsis: String
+  cover: String
+  author: Author
+  genre: Genre
+  createdBy: User!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type BookPaginated {
+  data: [FullBook!]!
+  offset: Int!
+  limit: Int!
+  total: Int!
+}
+
 type Query {
   user_profile: ProfileUser!
   user_find(paginate: PaginateDto): UserPaginated!
   user_login(input: LoginDto!): Login!
   user_valid_forgot_password_token(token: ID!): Boolean!
+  author_public_find: [Author!]!
+  author_public_find_by_slug_array(authorSlugs: [String!]!): [Author!]!
+  author_admin_find(paginate: PaginateDto): AuthorPaginated!
+  author_admin_find_by_id(authorId: ID!): FullAuthor!
+  genre_public_find: [Genre!]!
+  genre_public_find_by_slug_array(genreSlugs: [String!]!): [Genre!]!
+  genre_admin_find(paginate: PaginateDto): GenrePaginated!
+  genre_admin_find_by_id(genreId: ID!): FullGenre!
+  book_public_find: [Book!]!
+  book_public_find_by_slug_array(bookSlugs: [String!]!): [Book!]!
+  book_admin_find(paginate: PaginateDto): BookPaginated!
+  book_admin_find_by_id(bookId: ID!): FullBook!
 }
 
 input PaginateDto {
@@ -98,6 +190,15 @@ type Mutation {
   user_social_login(input: SocialLoginDto!): Login!
   user_link_social_profile(input: SocialLoginDto!): Boolean!
   user_unlink_social_profile(input: SocialUnlinkDto!): Boolean!
+  author_admin_create(authorData: AuthorCreateDto!): ID!
+  author_admin_modify(input: AuthorModifyDto!, authorId: ID!): ID!
+  author_admin_delete(authorId: ID!): ID!
+  genre_admin_create(genreData: GenreCreateDto!): ID!
+  genre_admin_modify(input: GenreModifyDto!, genreId: ID!): ID!
+  genre_admin_delete(genreId: ID!): ID!
+  book_admin_create(bookData: BookCreateDto!): ID!
+  book_admin_modify(input: BookModifyDto!, bookId: ID!): ID!
+  book_admin_delete(bookId: ID!): ID!
 }
 
 input RegisterDto {
@@ -137,4 +238,53 @@ input SocialLoginDto {
 input SocialUnlinkDto {
   id: String!
   type: String!
+}
+
+input AuthorCreateDto {
+  name: String!
+  slug: String
+  bio: String
+  photo: String
+  createdBy: String
+}
+
+input AuthorModifyDto {
+  name: String
+  slug: String
+  bio: String
+  photo: String
+}
+
+input GenreCreateDto {
+  name: String!
+  slug: String
+  photo: String
+  createdBy: String
+}
+
+input GenreModifyDto {
+  name: String
+  slug: String
+  photo: String
+}
+
+input BookCreateDto {
+  title: String!
+  author: String!
+  genre: String!
+  isbn: String
+  slug: String
+  synopsis: String
+  cover: String
+  createdBy: String
+}
+
+input BookModifyDto {
+  title: String
+  author: String
+  genre: String
+  isbn: String
+  slug: String
+  synopsis: String
+  cover: String
 }

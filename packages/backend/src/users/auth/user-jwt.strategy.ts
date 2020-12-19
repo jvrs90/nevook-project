@@ -12,11 +12,10 @@ import { JwtStrategies } from '@Common/enums/jwt-strategies.enum';
 /**
  * JWT custom implementation
  */
+
+// , JwtStrategies.USER
 @Injectable()
-export class UserJwtStrategy extends PassportStrategy(
-    Strategy,
-    JwtStrategies.USER
-) {
+export class UserJwtStrategy extends PassportStrategy( Strategy, JwtStrategies.USER ) {
     /**
      * @ignore
      */

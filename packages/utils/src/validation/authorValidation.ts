@@ -1,7 +1,7 @@
 /**
  * Name validation
  *
- * - Number of characters must ve beteween 1 to 80
+ * - Number of characters must be beteween 1 to 80
  * @param value Value to validate
  * @return Is valid
  */
@@ -18,8 +18,9 @@ export const nameValidation = (value: string) => {
  * @param value Value to validate
  * @return Is valid
  */
-export const bioValidation =(value: string)=>{
+export const bioValidation = (value: string)=>{
     const bio = value.trim();
+    if(!bio) return;
     if(bio.length < 1) return false;
     return true;
 }
