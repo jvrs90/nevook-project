@@ -1,6 +1,8 @@
 export * as FormValidation from './validation/formValidation';
 export * as TokenValidation from './validation/tokenValidation';
 export * as AuthorValidation from './validation/authorValidation';
+export * as GenreValidation from './validation/genreValidation';
+export * as BookValidation from './validation/bookValidation';
 
 
 

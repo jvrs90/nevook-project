@@ -1,7 +1,7 @@
 import { FileProcessService } from '@Common/utils/file-process.service';
 import {
 	fileFilter,
-	FOLDER_UPLOADS,
+	FOLDER_UPLOADS_USERS,
 	imageStorage,
 } from '@Common/utils/file-upload';
 import {
@@ -50,7 +50,7 @@ export class UserController {
 		@GetRestAuthUser() user: IUserDoc
 	): Promise<{ url: string }> {
 		if (!file) throw new BadRequestException();
-		this.fileProcessService.transformImage(join(FOLDER_UPLOADS, file.filename));
+		this.fileProcessService.transformImage(join(FOLDER_UPLOADS_USERS, file.filename));
 		return {
 			url: await this.userService.setPhoto(user, file.filename),
 		};

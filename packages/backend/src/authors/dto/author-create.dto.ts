@@ -5,12 +5,16 @@ import { InputType, Field} from '@nestjs/graphql';
 export class AuthorCreateDto {
     @Field()
     name: string;
+
     @Field()
-    slug: string;
+    slug?: string;
+
     @Field()
-    bio: string;
+    bio?: string;
+
     @Field()
-    photo: string;
+    photo?: string;
+
     @Field()
-    createdBy: ObjectID;
+    createdBy?: ObjectID
 }
