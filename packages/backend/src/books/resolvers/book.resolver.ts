@@ -51,18 +51,69 @@ export class BookResolver {
 
 
     /**
-     * Finds some book by an array of slugs
+     * Finds some book by an array of ids
      *
      * - AUTH: Public
-     * @param bookSlugs Book slugs array
+     * @param bookId Book ids array
      * @return Book data array
      */
     @Query(() => [Book])
-    book_public_find_by_slug_array(
-        @Args('bookSlugs', { type: () => [String]! }, ObjectIDArrayPipe)
-        bookSlugs: ObjectID[]
+    book_public_find_by_id_array(
+        @Args('bookId', { type: () => [String]! }, ObjectIDArrayPipe)
+        bookId: ObjectID[]
     ): Promise<IBookDoc[]> {
-        return this.bookService.publicFindBySlugArray(bookSlugs);
+        return this.bookService.publicFindBySlugArray(bookId);
+    }
+
+    /**
+     * Finds some book by an array of ids
+     *
+     * - AUTH: Public
+     * @param bookId Book ids array
+     * @return Book data array
+     */
+    @Query(() => Book)
+    book_public_find_by_slug(
+        @Args('bookSlug') bookSlug: string
+    ): Promise<IBookDoc<IUserDoc, IAuthorDoc, IGenreDoc>> {
+        return this.bookService.publicFindBySlugAndPopulate(bookSlug);
+    }
+
+    /**
+     * Finds book with same author
+     *
+     * @param bookAuthor
+     * @return Books data array
+     */
+    @Query(() => BookPaginated)
+    book_public_find_by_author(
+        @Args('paginate', { type: () => PaginateDto, nullable: true })
+        paginate: PaginateDto,
+        @Args('bookAuthor', { type: () => String! })
+        bookAuthor: ObjectID,
+    ): Promise<IPaginate<IBookDoc>> {
+        return this.bookService.publicFindBySameAuthorPaginate(
+            bookAuthor,
+            (paginate && paginate.offset) || 0,
+            (paginate && paginate.limit) || 10
+        );
+    }
+
+    /**
+     * Finds books with same genre
+     * @param bookGenre
+     */
+    @Query(() => BookPaginated)
+    book_public_find_by_genre(
+        @Args('paginate', { type: () => PaginateDto, nullable: true })
+        paginate: PaginateDto,
+        @Args('bookGenre') bookGenre: ObjectID,
+    ): Promise<IPaginate<IBookDoc>> {
+        return this.bookService.publicFindBySameGenrePaginate(
+            bookGenre,
+            (paginate && paginate.offset) || 0,
+            (paginate && paginate.limit) || 10
+        );
     }
 
     //#endregion
@@ -121,7 +172,7 @@ export class BookResolver {
      * @returns Book object id
      */
     @Mutation(() => ID)
-    @Auth({action: 'create', possession:'any', resource: AppResource.BOOK })
+    @Auth({ action: 'create', possession: 'any', resource: AppResource.BOOK })
     async book_admin_create(
         @Args('bookData', { type: () => BookCreateDto }, BookCreatePipe)
         bookData: BookCreateDto,
@@ -140,7 +191,7 @@ export class BookResolver {
      * @param input True if success
      */
     @Mutation(() => ID)
-    @Auth({action: 'update', possession:'any', resource: AppResource.BOOK })
+    @Auth({ action: 'update', possession: 'any', resource: AppResource.BOOK })
     async book_admin_modify(
         @Args('bookId', { type: () => ID }, ObjectIDPipe)
         bookId: ObjectID,
@@ -160,7 +211,7 @@ export class BookResolver {
      * @return True if success
      */
     @Mutation(() => ID)
-    @Auth({action: 'delete', possession:'any', resource: AppResource.BOOK })
+    @Auth({ action: 'delete', possession: 'any', resource: AppResource.BOOK })
     async book_admin_delete(
         @Args('bookId', { type: () => ID }, ObjectIDPipe)
         bookId: ObjectID

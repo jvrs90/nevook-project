@@ -35,14 +35,14 @@ const ProfileMenuNevook: FC = () => {
             <h2 className='mt-3 mb-0_5 text-xl font-semibold text-primary dark:text-cta'>Listas</h2>
 			<ul className='mt-0_5 shadow rounded-lg bg-white dark:bg-white-dark text-white-dark dark:text-white'>
 				<MenuLiLink
-					href={ProfilePaths.FOLLOWING}
-					active={currentPath === ProfilePaths.FOLLOWING}
+					href={ProfilePaths.MY_LISTS}
+					active={currentPath === ProfilePaths.MY_LISTS}
 					label='Ver mis listas'
 					icon={UserIcon}
 				/>
                 <MenuLiLink
-					href={ProfilePaths.FOLLOWS}
-					active={currentPath === ProfilePaths.FOLLOWS}
+					href={ProfilePaths.CREATE_LIST}
+					active={currentPath === ProfilePaths.CREATE_LIST}
 					label='Crear lista'
 					icon={UserIcon}
 				/>

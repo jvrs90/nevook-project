@@ -49,18 +49,18 @@ export class AuthorResolver {
 
 
     /**
-     * Finds some author by an array of slugs
+     * Finds some author by an array of ids
      *
      * - AUTH: Public
-     * @param authorSlugs Author slugs array
+     * @param authorId Author ids array
      * @return Author data array
      */
     @Query(() => [Author])
-    author_public_find_by_slug_array(
-        @Args('authorSlugs', { type: () => [String]! }, ObjectIDArrayPipe)
-        authorSlugs: ObjectID[]
+    author_public_find_by_id_array(
+        @Args('authorId', { type: () => [String]! }, ObjectIDArrayPipe)
+        authorId: ObjectID[]
     ): Promise<IAuthorDoc[]> {
-        return this.authorService.publicFindBySlugArray(authorSlugs);
+        return this.authorService.publicFindByIdArray(authorId);
     }
 
     //#endregion

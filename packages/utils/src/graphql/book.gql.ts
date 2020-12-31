@@ -74,6 +74,58 @@ export const book_public_find_by_slug_array = gql`
     }
 `;
 
+export const book_public_find_by_author = gql`
+    query book_public_find_by_author($bookAuthor: String!, $paginate: PaginateDto) {
+        book_public_find_by_author(bookAuthor: $bookAuthor, paginate: $paginate) {
+            data {
+                _id
+                title
+                slug
+                cover
+                author {
+                    _id
+                    name
+                    slug
+                }
+                genre {
+                    _id
+                    name
+                    slug
+                }
+            }
+            offset
+            limit
+            total
+        }
+    }
+`;
+
+export const book_public_find_by_genre = gql`
+    query book_public_find_by_genre($bookGenre: String!, $paginate: PaginateDto) {
+        book_public_find_by_genre(bookGenre: $bookGenre, paginate: $paginate) {
+            data {
+                _id
+                title
+                slug
+                cover
+                author {
+                    _id
+                    name
+                    slug
+                }
+                genre {
+                    _id
+                    name
+                    slug
+                }
+            }
+            offset
+            limit
+            total
+        }
+    }
+`;
+
 //#endregion
 
 //#region Find

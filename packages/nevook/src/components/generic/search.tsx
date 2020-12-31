@@ -16,6 +16,7 @@ const Search = () => {
           />
         </form>
         <div className='grid gap-1 grid-cols-2 md:grid-cols-5 mt-2 '>
+
         </div>
       </div>
     </section>

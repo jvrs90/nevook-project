@@ -13,6 +13,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import BookList from '@Components/book/book-list';
 
 const Home: FC = () => {
 	const router = useRouter();
@@ -27,16 +28,17 @@ const Home: FC = () => {
 		<>
 			<Head
 				title='Nevook'
-				description='😀 Únete a la comunidad lectora 📒📘 y te podrás crear una biblioteca personal con estantes 📚'
+				description='😀 Únete a la comunidad lectora 📒📘 y te podrás crear una biblioteca personal con estantes 📚 ¡Diviértete!'
 				url=''
 			/>
 			<div className='h-auto'>
 				{/* <Loader /> */}
 				<Jumbotron
-					title='Hola, visitante'
+					title='Hola'
 					image='asdf'
 				/>
 				<Search />
+				<BookList />
 			</div>
 		</>
 	);

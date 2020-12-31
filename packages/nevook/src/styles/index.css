@@ -3,6 +3,7 @@
 @import './checkbox.css';
 @import './switch.css';
 @import './loader.css';
+@import 'books.css';
 @import './avatar-editor.css';
 @import './dark.css';
 @tailwind base;
