@@ -4,9 +4,11 @@ import ProfileMenu from '@Components/profile/profile-menu';
 import ProfileMenuNevook from '@Components/profile/profile-menu-nevook';
 import ProfileMobileNav from '@Components/profile/profile-mobile-nav';
 import ProfileAccounts from '@Components/profile/sections/profile-accounts';
+import ProfileCreateList from '@Components/profile/sections/profile-create-list';
 import ProfileData from '@Components/profile/sections/profile-data';
 import ProfileFollow from '@Components/profile/sections/profile-follow';
 import ProfileHelp from '@Components/profile/sections/profile-help';
+import ProfileMyLists from '@Components/profile/sections/profile-my-lists';
 import ProfilePassword from '@Components/profile/sections/profile-password';
 import ProfilePreferences from '@Components/profile/sections/profile-preferences';
 import ProfileSummary from '@Components/profile/sections/profile-summary';
@@ -71,6 +73,14 @@ const ProfileLayout: FC<ProfileLayoutProps> = ({ path }) => {
 		[ProfilePaths.SUBSCRIPTION]: {
 			Component: ProfileFollow,
 			title: 'Mi suscripción',
+		},
+		[ProfilePaths.MY_LISTS]: {
+			Component: ProfileMyLists,
+			title: '📚 Mis listas',
+		},
+		[ProfilePaths.CREATE_LIST]: {
+			Component: ProfileCreateList,
+			title: 'Crear una lista',
 		},
 	};
 

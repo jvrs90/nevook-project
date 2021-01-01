@@ -71,12 +71,12 @@ export class AuthorService {
     /**
      * Finds some authors by an array of slugs.
      *
-     * @param authorsUrls Author urls array
+     * @param authorsSlugs Author urls array
      * @returns Authors array
      */
-    publicFindBySlugArray(authorsUrls: string[]): Promise<IAuthorDoc[]> {
+    publicFindByIdArray(authorsSlugs: string[]): Promise<IAuthorDoc[]> {
         return this.authorModel
-            .find({ _id: { $in: [...authorsUrls] } })
+            .find({ slug: { $in: [...authorsSlugs] } })
             .exec() as Promise<IAuthorDoc[]>;
     }
 

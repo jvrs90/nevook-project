@@ -35,14 +35,14 @@ export class BookService {
      */
     publicFind(): Promise<IBookDoc[]> {
         return this.bookModel.find()
-        .populate('author')
-        .populate('genre')
-        .populate('createdBy')
-        .exec() as Promise<IBookDoc[]>;
+            .populate('author')
+            .populate('genre')
+            .populate('createdBy')
+            .exec() as Promise<IBookDoc[]>;
     }
 
     /**
-     *Finds a book by slug and populate Genre Author and User
+     *Finds a book by slug and populate Genre Author
      *
      * @param bookSlug Book slug
      * @return Book with Genre, Author and User (createdBy)
@@ -54,7 +54,6 @@ export class BookService {
             .findOne({ slug: bookSlug })
             .populate('author')
             .populate('genre')
-            .populate('createdBy')
             .exec() as Promise<IBookDoc<IUserDoc, IAuthorDoc, IGenreDoc>>
     }
 
@@ -67,8 +66,73 @@ export class BookService {
      */
     publicFindBySlugArray(bookSlugs: string[]): Promise<IBookDoc[]> {
         return this.bookModel
-            .find({ _id: { $in: [...bookSlugs] } })
+            .find({ slug: { $in: [...bookSlugs] } })
             .exec() as Promise<IBookDoc[]>;
+    }
+
+    /**
+     * Finds books with same author
+     *
+     * @param bookAuthor Book Author ObjectID
+     */
+    async publicFindBySameAuthorPaginate(
+        bookAuthor: ObjectID,
+        offset: number = 0,
+        limit: number = 10,
+    ): Promise<IPaginate<IBookDoc>> {
+        return {
+            data: (await this.bookModel
+                .find({ author: bookAuthor })
+                .populate('author')
+                .populate('genre')
+                .skip(offset)
+                .limit(limit)
+                .exec()) as IBookDoc[],
+            limit,
+            offset,
+            total: await this.bookModel.countDocuments().exec()
+
+        }
+    }
+
+    /**
+     * Finds books with same genre
+     *
+     * @param bookGenre Book Genre ObjectID
+     */
+    async publicFindBySameGenrePaginate(
+        bookGenre: ObjectID,
+        offset: number = 0,
+        limit: number = 10,
+    ): Promise<IPaginate<IBookDoc>> {
+        return {
+            data: (await this.bookModel
+                .find({ genre: bookGenre })
+                .populate('author')
+                .populate('genre')
+                .skip(offset)
+                .limit(limit)
+                .exec()) as IBookDoc[],
+            limit,
+            offset,
+            total: await this.bookModel.countDocuments().exec()
+
+        }
+    }
+
+    /**
+     *
+     * @param bookAuthor Book Author ObjectID
+     * @param size Size of books returned randomly.
+     * By defaults is 5
+     */
+    async publicFindRandomBookByAuthor(
+        bookAuthor: ObjectID,
+        size: number = 5
+    ) {
+        return await this.bookModel.aggregate(
+            [{ $sample: { size: size } }]
+        )
     }
 
 
@@ -106,7 +170,7 @@ export class BookService {
 
     /**
      * Finds a book by slug.
-     * @param bookSlug Author slug
+     * @param bookSlug Book slug
      */
     findBySlug(bookSlug: string): Promise<IBookDoc | undefined> {
         return this.bookModel
@@ -117,7 +181,7 @@ export class BookService {
 
     /**
      * Finds a book by id
-     * @param bookId Author ObjectID
+     * @param bookId Book ObjectID
      */
     findById(bookId: ObjectID): Promise<IBookDoc | undefined> {
         return this.bookModel.findById(bookId).exec() as Promise<IBookDoc>;

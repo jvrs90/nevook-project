@@ -155,7 +155,7 @@ type Query {
   user_login(input: LoginDto!): Login!
   user_valid_forgot_password_token(token: ID!): Boolean!
   author_public_find: [Author!]!
-  author_public_find_by_slug_array(authorSlugs: [String!]!): [Author!]!
+  author_public_find_by_id_array(authorId: [String!]!): [Author!]!
   author_admin_find(paginate: PaginateDto): AuthorPaginated!
   author_admin_find_by_id(authorId: ID!): FullAuthor!
   genre_public_find: [Genre!]!
@@ -163,7 +163,10 @@ type Query {
   genre_admin_find(paginate: PaginateDto): GenrePaginated!
   genre_admin_find_by_id(genreId: ID!): FullGenre!
   book_public_find: [Book!]!
-  book_public_find_by_slug_array(bookSlugs: [String!]!): [Book!]!
+  book_public_find_by_id_array(bookId: [String!]!): [Book!]!
+  book_public_find_by_slug(bookSlug: String!): Book!
+  book_public_find_by_author(bookAuthor: String!, paginate: PaginateDto): BookPaginated!
+  book_public_find_by_genre(bookGenre: String!, paginate: PaginateDto): BookPaginated!
   book_admin_find(paginate: PaginateDto): BookPaginated!
   book_admin_find_by_id(bookId: ID!): FullBook!
 }

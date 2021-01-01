@@ -12,7 +12,8 @@ export class FileProcessService {
 	/**
 	 * Image filesize result
 	 */
-	private resultSize = 150;
+	private resultSizeW = 330;
+	private resultSizeH = 500;
 
 	/**
 	 * String format bytes to readable string
@@ -39,8 +40,8 @@ export class FileProcessService {
 	 */
 	async transformImage(
 		pathName: string,
-		width: number = this.resultSize,
-		height: number = this.resultSize
+		width: number = this.resultSizeW,
+		height: number = this.resultSizeH
 	): Promise<sharp.OutputInfo | null> {
 		const ext = extname(pathName.toLocaleLowerCase()).substring(1);
 		switch (ext) {
@@ -63,15 +64,15 @@ export class FileProcessService {
 	 */
 	private async transformPng(
 		pathName: string,
-		width: number = this.resultSize,
-		height: number = this.resultSize
+		width: number = this.resultSizeW,
+		height: number = this.resultSizeH
 	): Promise<sharp.OutputInfo> {
 		const file = await promises.readFile(pathName);
 		return await sharp(file)
 			.resize({
 				height,
 				width,
-				fit: 'cover',
+				fit: 'fill'
 			})
 			.png({
 				adaptiveFiltering: true,
@@ -94,15 +95,15 @@ export class FileProcessService {
 	 */
 	private async transformJpg(
 		pathName: string,
-		width: number = this.resultSize,
-		height: number = this.resultSize
+		width: number = this.resultSizeW,
+		height: number = this.resultSizeH
 	): Promise<sharp.OutputInfo> {
 		const file = await promises.readFile(pathName);
 		return await sharp(file)
 			.resize({
 				height,
 				width,
-				fit: 'cover',
+				fit: 'fill'
 			})
 			.jpeg({
 				quality: 75,

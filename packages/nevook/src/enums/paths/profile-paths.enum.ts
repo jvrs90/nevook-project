@@ -9,5 +9,7 @@ export enum ProfilePaths {
 	PASSWORD = '/perfil/password',
 	FOLLOWS = '/perfil/seguidores',
 	FOLLOWING = '/perfil/siguiendo',
+	MY_LISTS = '/perfil/mis-listas',
+	CREATE_LIST = '/perfil/crear-lista',
 	SUBSCRIPTION = '/perfil/suscripticion',
 }

@@ -1,0 +1,33 @@
+.book-info {
+    opacity: 0;
+}
+
+.book-cover {
+    position: relative;
+}
+
+.book-item:hover .book-cover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,.65) 30%, rgba(0,0,0,0.3) 70%);
+}
+
+.book-item:hover .book-info {
+    opacity: 1;
+    background-color: black;
+    z-index: 10;
+}
+
+/* Book Item */
+
+.BookItem__info {}
+
+.BookItem__info .BookItem__info-title h1{
+
+}
+.BookItem__info-author-genre{}
+.BookItem_info-synopsis{}

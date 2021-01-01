@@ -8,9 +8,9 @@ type Props = {
 }
 
 const ListItem = ({ data }: Props) => (
-  <Link href="/users/[id]" as={`/users/${data.id}`}>
+  <Link href="/users/[id]" as={`/users/${data._id}`}>
     <a>
-      {data.id}: {data.name}
+      {data._id}: {data.username}
     </a>
   </Link>
 )
